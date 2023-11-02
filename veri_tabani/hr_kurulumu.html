@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="tr" data-bs-theme="dark">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Postgre ile Hr</title>
+    <link rel="icon" href="../data/img/ico.png">
+    <link href="../data/prism.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Belgelendirme</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="../index.html">Ana sayfa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Kategoriler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Hakkında</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-3">
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Ara" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Ara</button>
+                </form>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="row">
+        <div class="col-3">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action ">Genel</a>
+                <a href="#" class="list-group-item list-group-item-action">Rust</a>
+                <a href="#" class="list-group-item list-group-item-action">Python</a>
+                <a href="#" class="list-group-item list-group-item-action active">Veri tabanı</a>
+            </div>
+        </div>
+
+        <div class="col-9">
+            <h1>Postgre ile hr şema kurlumu</h1>
+            <p>Selamunaleyküm dostlar. Bugün Postgre kurulumunu yapıp pgAdmin4 ile nasıl hr şemasını ekleyip
+                sorgulayabilieceğimizi göstermeye çalışacağım inşAllah</p>
+            <p>İlk öncelikle postgre sqli kuruyoruz</p>
+            <pre class="line-numbers"><code class="language-bash"
+>sudo apt install pgadmin4 postgresql
+</code></pre>
+            <p>Sonrasında psql içine girip bir kullancı oluşturuyoruz. Burada <span
+                    style="font-weight: 900;">isim</span> ve <span style="font-weight: 900;">şifreyi</span>
+                değişitirebilirisiniz</p>
+            <pre class="line-numbers"><code class="language-bash"
+    >sudo su - postgres
+psql
+
+#bu kısım postgres=# içinde olacak
+create user isim with superuser password 'sifre';
+</code></pre>
+            <p>Sonrasında pgAdmin4'ü açıp resimdeki ayarları yapmamız lazım</p>
+            <img style="margin-bottom: 5%;" src="../data/img/hr_sheme/hr_pg.png" alt="hr_sheme">
+
+            <h3>Veri tabanını ekleme</h3>
+            <p>Öncelikle veri tabanını <span><a href="https://gist.githubusercontent.com/gourab5139014/b0b8e90c66acd5d0e9bcfebbff65d02a/raw/f45ea80fbea076fd385df165a96943c2198873fa/create_hr_schema.sql">burdan </a></span> indirelim </p>
+            <p>Simdi veri tabanına bağlanabildiğimize göre yeni bir tane veri tabanı oluşturalım</p>
+            <img style="margin-bottom: 5%;" src="../data/img/hr_sheme/yeni_db.png" alt="hr_sheme">
+            <p>herhangi biri isim verip oluşturalım. sonrasında oluşan veri tabanına sağ tık yapıp alt kısımdaki <span style="font-weight: 900;">query tool</span> kısmana gelip veri tabanımızı ekliyoruz sonrasında çalıştırma butonuna basıyoruz veya f5</p>
+            <img style="margin-bottom: 5%; height: 20%;" src="../data/img/hr_sheme/db_ekle.png" alt="hr_sheme">
+            
+            <p>eğer bir sıkınt çıkmadısya tablolarımız gelmiş olması lazım</p>
+            <img style="margin-bottom: 5%; height: 20%;" src="../data/img/hr_sheme/tablolar.png" alt="hr_sheme">
+            <p>sonrasında query kısmındaki bölümü silip test için karışık bir sorgu atalım</p>
+            <pre class="line-numbers"><code class="language-sql"
+                >-- Kendi birimi ortalaması maaş alan kişileri bulunuz.
+
+SELECT e.*, ortalama 
+FROM (SELECT department_id, AVG(salary) ortalama
+      FROM employees  
+      GROUP BY department_id) dept_ort, 
+      employees e
+WHERE e.department_id=dept_ort.department_id
+  AND e.salary < dept_ort.ortalama</code></pre>
+  <img style="margin-bottom: 5%; " src="../data/img/hr_sheme/ornek.png" alt="hr_sheme">
+
+        
+        </div>
+    </div>
+
+    <script src="../data/prism.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
